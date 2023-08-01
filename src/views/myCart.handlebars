@@ -1,0 +1,37 @@
+<div class="buttons">
+  <a
+    class="button is-info"
+    onclick="backToHome()"
+    style="margin-top: 20px; margin-left: 10px;"
+  >
+    <strong>Back to Home</strong>
+  </a>
+</div>
+<section class="mt-6">
+  <div class="container is-flex is-flex-wrap-wrap" id="products-container">
+
+    {{#each products}}
+
+      <div class="card" style="width: 250px; margin: 20px">
+        <div class="card-image" style="padding: 15px">
+          <figure class="image is-4by3">
+            <img src="{{_id.thumbnail}}" alt="Placeholder image" />
+          </figure>
+        </div>
+        <div class="card-content">
+          <div class="media">
+            <div class="media-content">
+              <p class="title is-6">Cantidad: {{quantity}}</p>
+              <p class="title is-6">{{_id.title}}</p>
+              <p class="title is-4">{{_id.description}}</p>
+              <p class="subtitle is-6">{{_id.price}}</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</section>
+
+<script src="/js/cartDetail.js"></script>

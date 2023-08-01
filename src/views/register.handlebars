@@ -1,0 +1,17 @@
+<button class="button is-danger mt-3" onclick="location.href='/auth/login'">Ir a login</button>
+<div class="container" style>
+    <div class="field">
+        <form action="/auth/register" method="post" class="control has-icons-left has-icons-right">
+            <label class="label mt-6">Nuevo Usuario</label>
+            <input type="text" name="first_name" placeholder="Nombre" class="input is-success mt-3"></input>
+            <input type="text" name="last_name" placeholder="Apellido" class="input is-success mt-3"></input>
+            <input type="number" name="age" placeholder="Edad" class="input is-success mt-3" min="0" max="100"></input>
+            <input type="email" name="email" placeholder="Email" class="input is-success mt-3" required></input>
+            <span class="icon is-small is-left">
+                    <i class="fas fa-user"></i>
+                </span>
+            <input type="password" name="password" placeholder="Crea una contraseña" class="input is-success mt-3" required></input>
+            <button type="submit"  class="button is-primary mt-3">Registrarme</button>
+        </form>
+    </div>
+</div>
