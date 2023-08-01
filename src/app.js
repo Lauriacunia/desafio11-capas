@@ -5,11 +5,7 @@ import http from "http";
 import homeFsRoutes from "./routes/fs/homeFsRoutes.js";
 import productFsRoutes from "./routes/fs/productFsRoutes.js";
 import cartFsRoutes from "./routes/fs/cartFsRoutes.js";
-import homeRoutes from "./routes/mongo/homeRoutes.js";
-import productRoutes from "./routes/mongo/productRoutes.js";
-import cartRoutes from "./routes/mongo/cartRoutes.js";
-import chatRoutes from "./routes/mongo/chatRoutes.js";
-import authRoutes from "./routes/mongo/authRoutes.js";
+import indexRoutes from "./routes/mongo/indexRoutes.js";
 import websockets from "./websockets/websockets.js";
 import exphbs from "express-handlebars";
 import { dirname } from "path";
@@ -90,16 +86,11 @@ app.use("/fs/home", homeFsRoutes);
 app.use("/fs/products", productFsRoutes);
 app.use("/fs/carts", cartFsRoutes);
 // con MongoDB
-app.use("/home", homeRoutes);
-app.use("/products", productRoutes);
-app.use("/carts", cartRoutes);
-app.use("/chat", chatRoutes);
-app.use("/auth", authRoutes);
+app.use("/", indexRoutes);
 app.use("/error", (req, res) => {
   const { errorMessage } = req.flash();
   res.render("error", { errorMessage });
 });
-
 // redirect to /home
 app.get("/", (req, res) => {
   res.redirect("/home");
