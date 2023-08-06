@@ -6,8 +6,7 @@ import {
   update,
   deleteOne,
 } from "../../controllers/product.controller.js";
-import { MongoDBProducts } from "../../daos/mongo/MongoDBProducts.js";
-const db = new MongoDBProducts();
+
 import { validateRequest } from "../../middleware/validators.js";
 import multer from "multer";
 /**Multer config */

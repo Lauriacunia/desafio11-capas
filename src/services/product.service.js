@@ -1,11 +1,10 @@
-import MongoClass from "./MongoClass.js";
-import { productsSchema } from "./models/ProductsSchema.js";
+import BaseService from "./base.service.js";
+import productsModel from "../repository/mongo/models/product.model.js";
 
-export class MongoDBProducts extends MongoClass {
+class ProductService extends BaseService {
   constructor() {
-    super("products", productsSchema);
+    super(productsModel);
   }
-
   async getAll(limit, page, sort, query) {
     try {
       /**El primer argumento es el filtro de busqueda,
@@ -21,7 +20,7 @@ export class MongoDBProducts extends MongoClass {
         ? { title: { $regex: query.title, $options: "i" } }
         : {};
       /** La "i" de las options hace que no discrimine mayúsculas o minúsculas */
-      const all = await this.baseModel.paginate(filter, {
+      const all = await this.db.paginate(filter, {
         limit: limit || 10,
         page: page || 1,
         sort: sort || {},
@@ -33,3 +32,5 @@ export class MongoDBProducts extends MongoClass {
     }
   }
 }
+
+export default new ProductService();

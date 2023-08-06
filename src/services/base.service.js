@@ -1,13 +1,10 @@
-import mongoose from "mongoose";
-
-class MongoClass {
-  constructor(collectionName, docSchema) {
-    this.baseModel = mongoose.model(collectionName, docSchema);
+export default class BaseService {
+  constructor(model) {
+    this.db = model;
   }
-
   async getAll() {
     try {
-      const all = await this.baseModel.find({});
+      const all = await this.db.find({});
       return all;
     } catch (err) {
       throw new Error(err);
@@ -16,7 +13,7 @@ class MongoClass {
 
   async getOne(id) {
     try {
-      const one = await this.baseModel.findById(id);
+      const one = await this.db.findById(id);
       return one;
     } catch (err) {
       throw new Error(err);
@@ -25,7 +22,7 @@ class MongoClass {
 
   async create(doc) {
     try {
-      const newDoc = await this.baseModel.create(doc);
+      const newDoc = await this.db.create(doc);
       return newDoc;
     } catch (err) {
       throw new Error(err);
@@ -34,8 +31,8 @@ class MongoClass {
 
   async update(id, doc) {
     try {
-      await this.baseModel.findByIdAndUpdate(id, doc);
-      const docUpdated = await this.baseModel.findById(id);
+      await this.db.findByIdAndUpdate(id, doc);
+      const docUpdated = await this.db.findById(id);
       return docUpdated;
     } catch (err) {
       throw new Error(err);
@@ -44,12 +41,10 @@ class MongoClass {
 
   async delete(id) {
     try {
-      const deletedDoc = await this.baseModel.findByIdAndDelete(id);
+      const deletedDoc = await this.db.findByIdAndDelete(id);
       return deletedDoc;
     } catch (err) {
       throw new Error(err);
     }
   }
 }
-
-export default MongoClass;

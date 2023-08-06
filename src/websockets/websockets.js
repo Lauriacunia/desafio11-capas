@@ -1,5 +1,4 @@
-import MongoDBChats from "../daos/mongo/MongoDBChats.js";
-const db = new MongoDBChats();
+import chatService from "../services/chat.service.js";
 
 export default (io) => {
   io.on("connection", (socket) => {

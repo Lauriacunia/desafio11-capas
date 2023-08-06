@@ -1,7 +1,3 @@
-import ProductManager from "../daos/fs/productManager.js";
-const path = "src/db/products.json";
-const myProductManager = new ProductManager(path);
-
 const validateRequest = (req, res, next) => {
   const keysBody = Object.keys(req.body);
   console.log("keysBody", keysBody);

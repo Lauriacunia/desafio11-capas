@@ -2,9 +2,6 @@ import express from "express";
 import morgan from "morgan";
 import { Server as SocketServer } from "socket.io";
 import http from "http";
-import homeFsRoutes from "./routes/fs/homeFsRoutes.js";
-import productFsRoutes from "./routes/fs/productFsRoutes.js";
-import cartFsRoutes from "./routes/fs/cartFsRoutes.js";
 import indexRoutes from "./routes/mongo/indexRoutes.js";
 import websockets from "./websockets/websockets.js";
 import exphbs from "express-handlebars";
@@ -81,11 +78,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 /** ★━━━━━━━━━━━★ routes ★━━━━━━━━━━━★ */
-// con FileSystem
-app.use("/fs/home", homeFsRoutes);
-app.use("/fs/products", productFsRoutes);
-app.use("/fs/carts", cartFsRoutes);
-// con MongoDB
+
 app.use("/", indexRoutes);
 app.use("/error", (req, res) => {
   const { errorMessage } = req.flash();

@@ -1,15 +1,15 @@
-import MongoClass from "./MongoClass.js";
-import { cartsSchema } from "./models/CartsSchema.js";
+import cartModel from "../repository/mongo/models/cart.model.js";
+import BaseService from "./base.service.js";
 
-export class MongoDBCarts extends MongoClass {
+class CartService extends BaseService {
   constructor() {
-    super("carts", cartsSchema);
+    super(cartModel);
   }
 
   // sobreescribe el metodo getAll de la clase padre
   async getAll() {
     // traer el carrito con los productos usando populate
-    const carritos = await this.baseModel.find({}).populate({
+    const carritos = await this.db.find({}).populate({
       path: "products",
       populate: { path: "_id", model: "products" },
     });
@@ -18,7 +18,7 @@ export class MongoDBCarts extends MongoClass {
 
   async getOne(id) {
     try {
-      const one = await this.baseModel.findById(id).populate({
+      const one = await this.db.findById(id).populate({
         path: "products",
         populate: { path: "_id", model: "products" },
       });
@@ -39,7 +39,7 @@ export class MongoDBCarts extends MongoClass {
     } else {
       cart.products.push({ _id: product._id, quantity: 1 });
     }
-    const cartUpdated = await this.baseModel.findByIdAndUpdate(cart._id, {
+    const cartUpdated = await this.db.findByIdAndUpdate(cart._id, {
       products: cart.products,
     });
     return cartUpdated;
@@ -55,7 +55,7 @@ export class MongoDBCarts extends MongoClass {
     } else {
       cart.products.push({ _id: product._id, quantity: quantity });
     }
-    const cartUpdated = await this.baseModel.findByIdAndUpdate(cart._id, {
+    const cartUpdated = await this.db.findByIdAndUpdate(cart._id, {
       products: cart.products,
     });
     return cartUpdated;
@@ -76,23 +76,25 @@ export class MongoDBCarts extends MongoClass {
     } else {
       throw new Error("El producto no está en el carrito");
     }
-    const cartUpdated = await this.baseModel.findByIdAndUpdate(cart._id, {
+    const cartUpdated = await this.db.findByIdAndUpdate(cart._id, {
       products: cart.products,
     });
     return cartUpdated;
   }
 
   async emptyCart(cart) {
-    const cartUpdated = await this.baseModel.findByIdAndUpdate(cart._id, {
+    const cartUpdated = await this.db.findByIdAndUpdate(cart._id, {
       products: [],
     });
     return cartUpdated;
   }
 
   async updateProductsOfOneCart(cart, products) {
-    const cartUpdated = await this.baseModel.findByIdAndUpdate(cart._id, {
+    const cartUpdated = await this.db.findByIdAndUpdate(cart._id, {
       products: products,
     });
     return cartUpdated;
   }
 }
+
+export default new CartService();
