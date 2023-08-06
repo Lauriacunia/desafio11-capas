@@ -194,6 +194,22 @@ class CartController {
   }
 }
 
+/**Creo una instancia de la clase CartController */
+const cartController = new CartController();
+
+/**Con destructuring declaro variables que guarden todos sus métodos */
+const {
+  create,
+  getAll,
+  getProductsOfCart,
+  viewCartDetail,
+  addProductToCart,
+  updateAllProductsOfCart,
+  deleteOneProductOfCart,
+  deleteAllProductsOfCart,
+} = cartController;
+
+/**Exporto los métodos del controlador */
 export {
   create,
   getAll,

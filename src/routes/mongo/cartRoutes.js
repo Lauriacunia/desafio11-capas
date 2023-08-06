@@ -9,7 +9,7 @@ import {
   updateAllProductsOfCart,
   deleteOneProductOfCart,
   deleteAllProductsOfCart,
-} from "../../controllers/mongo/cartController.js";
+} from "../../controllers/cart.controller.js";
 
 router.post("/", create);
 router.get("/", getAll);
