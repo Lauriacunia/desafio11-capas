@@ -1,57 +1,38 @@
 import passport from "passport";
 import { Router } from "express";
 const router = Router();
+import {
+  viewLogin,
+  viewRegister,
+  getCurrentUser,
+  logout,
+  redirectToHome,
+} from "../../controllers/auth.controller.js";
 
-//vista de login
-router.get("/login", (req, res) => {
-  res.render("login");
-});
-
-// vista de register
-router.get("/register", (req, res) => {
-  res.render("register");
-});
-
-// register post
+router.get("/login", viewLogin);
+router.get("/register", viewRegister);
+/**passport lo dejo acá como middleware */
 router.post(
   "/register",
   passport.authenticate("register", {
     successRedirect: "/auth/login",
     failureRedirect: "/error",
-    failureFlash: true, // Habilitar mensajes flash
+    failureFlash: true,
   })
 );
 
-// login post
 router.post(
   "/login",
   passport.authenticate("login", {
     successRedirect: "/home",
     failureRedirect: "/error",
-    failureFlash: true, // Habilitar mensajes flash
+    failureFlash: true,
   })
 );
 
-// obtener el usuario autenticado actualmente
-router.get("/current", (req, res) => {
-  res.json(req.user);
-});
+router.get("/current", getCurrentUser);
 
-router.get("/logout", (req, res) => {
-  // Hace logout y elimina la sesión del usuario autenticado
-  console.log("req.logout", req.logout);
-  req.logout(function (err) {
-    if (err) {
-      // Maneja el error de logout
-      console.error(err);
-      // Redirige a una página de error o manejo de errores
-      return res.redirect("/error");
-    }
-
-    // Redirige al usuario a la ruta de autenticación
-    res.render("login");
-  });
-});
+router.get("/logout", logout);
 
 /** rutas de auth con github */
 router.get(
@@ -62,9 +43,6 @@ router.get(
 router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "/error" }),
-  (req, res) => {
-    // Redirige al usuario a la página deseada después de iniciar sesión correctamente
-    res.redirect("/home");
-  }
+  redirectToHome
 );
 export default router;
