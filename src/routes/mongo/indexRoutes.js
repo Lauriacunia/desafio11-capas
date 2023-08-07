@@ -13,4 +13,16 @@ router.use("/carts", cartRoutes);
 router.use("/chat", chatRoutes);
 router.use("/auth", authRoutes);
 
+router.use("/error", (req, res) => {
+  const { errorMessage } = req.flash();
+  res.render("error", { errorMessage });
+});
+
+router.use("/", (req, res) => {
+  res.redirect("/home");
+});
+
+router.use("*", (req, res, next) => {
+  res.render("notfound");
+});
 export default router;

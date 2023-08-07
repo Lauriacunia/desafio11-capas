@@ -9,9 +9,11 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { connectMongoDB } from "./config/configMongoDB.js";
 import cookieParser from "cookie-parser";
-import session from "express-session";
-import MongoStore from "connect-mongo";
-import { passport } from "./auth/passport-local.js";
+import {
+  sessionConfig,
+  passportInitialize,
+  passportSession,
+} from "./config/session-config.js";
 import flash from "connect-flash";
 
 /** ★━━━━━━━━━━━★ variables ★━━━━━━━━━━━★ */
@@ -23,10 +25,7 @@ const __dirname = dirname(__filename);
 
 /** ★━━━━━━━━━━━★ server httt & websocket ★━━━━━━━━━━━★ */
 
-/** Tenemos dos servidores:  httpServer (http) y io (websocket)*/
 const httpServer = http.createServer(app);
-
-/** Crear nuevo servidor websocket */
 const io = new SocketServer(httpServer);
 
 websockets(io);
@@ -36,33 +35,10 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
-
-/** para gestionar cookies dentro de cada endpoint
- * lo que está entre parentesis es la clave secreta
- */
 app.use(cookieParser("mySecret"));
-/** guardar session en navegador*/
-// app.use(
-//   session({ secret: "un-re-secreto", resave: true, saveUninitialized: true })
-// );
-/** Persistir session en Mongo Atlas */
-const MONGO_USER = process.env.MONGO_USER;
-const MONGO_PASS = process.env.MONGO_PASS;
-const DB_NAME = process.env.DB_NAME;
-app.use(
-  session({
-    secret: "secret",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl: `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.cyfup.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
-      ttl: 60 * 10, // 10 minutes
-    }),
-  })
-);
-app.use(passport.initialize()); // Inicializa passport
-app.use(passport.session()); // Enlaza passport con la sesion
-
+app.use(sessionConfig);
+app.use(passportInitialize);
+app.use(passportSession);
 app.use(flash());
 
 /** ★━━━━━━━━━━━★ frontend ★━━━━━━━━━━━★*/
@@ -80,18 +56,6 @@ app.set("view engine", "handlebars");
 /** ★━━━━━━━━━━━★ routes ★━━━━━━━━━━━★ */
 
 app.use("/", indexRoutes);
-app.use("/error", (req, res) => {
-  const { errorMessage } = req.flash();
-  res.render("error", { errorMessage });
-});
-// redirect to /home
-app.get("/", (req, res) => {
-  res.redirect("/home");
-});
-//not found
-app.use("*", (req, res, next) => {
-  res.render("notfound");
-});
 
 /** ★━━━━━━━━━━━★ connection mongoDB ★━━━━━━━━━━━★ */
 connectMongoDB();
